@@ -1,0 +1,197 @@
+.responseContainer {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.costSummary {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #0066cc;
+}
+
+.costSummary h3 {
+  margin: 0 0 0.5rem 0;
+  color: #0066cc;
+}
+
+.costSummary p {
+  margin: 0.25rem 0;
+  color: #666;
+}
+
+.responseContent {
+  padding: 1rem;
+}
+
+.responseContent h2 {
+  margin: 0 0 1.5rem 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.section h3 {
+  margin: 0 0 1rem 0;
+  color: #444;
+  font-size: 1.2rem;
+}
+
+.section p {
+  margin: 0;
+  line-height: 1.6;
+  color: #666;
+}
+
+.section ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  list-style-type: none;
+}
+
+.section li {
+  margin: 0.5rem 0;
+  color: #666;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.section li:before {
+  content: "•";
+  color: #0066cc;
+  position: absolute;
+  left: 0;
+}
+
+.costDetails {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.costItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.costTotal {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  border-top: 2px solid #0066cc;
+  color: #0066cc;
+}
+
+.actionGroup {
+  margin: 1rem 0;
+}
+
+.actionGroup h4 {
+  color: #0066cc;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.contributors {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #6c757d;
+}
+
+.contributors h3 {
+  margin: 0 0 0.5rem 0;
+  color: #6c757d;
+}
+
+.executiveList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.contributor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.contributorBadge {
+  padding: 0.25rem 0.5rem;
+  background: #6c757d;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.synthesisReport {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.synthesisReport h3 {
+  color: #0066cc;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.synthesisReport h4 {
+  color: #333;
+  margin: 1rem 0;
+  font-size: 1.2rem;
+}
+
+.synthesisReport h5 {
+  color: #666;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.alignmentSection {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.implementationSection {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.timeframe {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.timeframe h5 {
+  color: #0066cc;
+  margin-bottom: 0.5rem;
+} 
