@@ -17,7 +17,6 @@ export const CompanyConfig: React.FC<CompanyConfigProps> = ({ companyContext, on
 
   return (
     <div className={styles.configContainer}>
-      <h2>Company Configuration</h2>
       <div className={styles.formGroup}>
         <label htmlFor="companyName">Company Name</label>
         <input

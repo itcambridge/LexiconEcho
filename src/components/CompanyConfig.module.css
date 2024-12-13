@@ -1,40 +1,59 @@
 .configContainer {
-  background: white;
+  background: var(--glass-background);
+  backdrop-filter: var(--glass-blur);
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .formGroup {
   margin-bottom: 1.5rem;
 }
 
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
 .formGroup label {
   display: block;
-  margin-bottom: 0.5rem;
-  color: #333;
+  margin-bottom: 0.75rem;
+  color: var(--color-dark);
   font-weight: 500;
+  font-size: 1rem;
+  opacity: 0.9;
 }
 
 .formGroup input,
 .formGroup textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  width: calc(100% - 2rem);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background: var(--glass-background);
+  color: var(--color-dark);
 }
 
 .formGroup input:focus,
 .formGroup textarea:focus {
-  border-color: #0066cc;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
 }
 
 .formGroup textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 80px;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: var(--color-gray);
+  opacity: 0.7;
 } 

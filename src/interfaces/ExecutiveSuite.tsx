@@ -222,6 +222,26 @@ export const ExecutiveSuite: React.FC<ExecutiveSuiteProps> = ({ onConsult, isLoa
   // Render the component's user interface
   return (
     <div className={styles.container}>
+      {/* Query input section */}
+      <div className={styles.querySection}>
+        {/* Text area for user's question */}
+        <textarea
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Enter your business query..."
+          className={styles.queryInput}
+          rows={4}
+        />
+        {/* Button to start consultation */}
+        <button
+          onClick={handleConsult}
+          disabled={isLoading || isConsulting || !query.trim()}
+          className={styles.consultButton}
+        >
+          {isLoading || isConsulting ? 'Getting Strategic Advice...' : 'Get Strategic Advice'}
+        </button>
+      </div>
+
       {/* Grid of executive cards */}
       <div className={styles.executiveGrid}>
         {executives.map((exec) => {
@@ -277,26 +297,6 @@ export const ExecutiveSuite: React.FC<ExecutiveSuiteProps> = ({ onConsult, isLoa
           </div>
         </div>
       )}
-
-      {/* Query input section */}
-      <div className={styles.querySection}>
-        {/* Text area for user's question */}
-        <textarea
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Enter your business query..."
-          className={styles.queryInput}
-          rows={4}
-        />
-        {/* Button to start consultation */}
-        <button
-          onClick={handleConsult}
-          disabled={isLoading || isConsulting || !query.trim()}
-          className={styles.consultButton}
-        >
-          {isLoading || isConsulting ? 'Getting Strategic Advice...' : 'Get Strategic Advice'}
-        </button>
-      </div>
 
       {/* Show response visualizer when we have synthesis data */}
       {synthesisData && (
