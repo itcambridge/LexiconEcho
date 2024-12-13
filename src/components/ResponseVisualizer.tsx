@@ -19,19 +19,19 @@ const CostSummary: React.FC<{ summary: ResponseVisualizerProps['costSummary'] }>
     <div className={styles.costDetails}>
       <div className={styles.costItem}>
         <span>Total Tokens:</span>
-        <span>{summary.tokens}</span>
+        <span>{summary.tokens.toLocaleString()}</span>
       </div>
       <div className={styles.costItem}>
         <span>Prompt Tokens:</span>
-        <span>{summary.prompt_tokens}</span>
+        <span>{summary.prompt_tokens.toLocaleString()}</span>
       </div>
       <div className={styles.costItem}>
         <span>Completion Tokens:</span>
-        <span>{summary.completion_tokens}</span>
+        <span>{summary.completion_tokens.toLocaleString()}</span>
       </div>
       <div className={styles.costTotal}>
         <span>Total Cost:</span>
-        <span>${summary.cost.toFixed(4)}</span>
+        <span>${(summary.cost || 0).toFixed(4)}</span>
       </div>
     </div>
   </div>

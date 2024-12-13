@@ -259,7 +259,7 @@ export default async function handler(
 
     // Generate cost report
     const costReport = ConversationCostTracker.generateReport();
-    console.log('[Debug API] Cost report generated:', costReport);
+    console.log('[Debug API] Cost report generated:', JSON.stringify(costReport, null, 2));
 
     // Send final response
     await sendSSEMessage(res, { 

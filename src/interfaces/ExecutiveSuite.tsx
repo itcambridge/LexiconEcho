@@ -135,7 +135,28 @@ export const ExecutiveSuite: React.FC<ExecutiveSuiteProps> = ({ onConsult, isLoa
           } else if (data.type === 'final') {
             logger.info('Got final synthesis');
             addStatusMessage('Consultation complete. Generating final synthesis...');
-            if (data.costReport) setCostReport(data.costReport);
+            
+            // Log and handle cost report
+            if (data.costReport) {
+              logger.debug('Cost report received:', data.costReport);
+              setCostReport(data.costReport);
+              
+              // Pass cost data to parent
+              if (onContribute) {
+                const costSummary = {
+                  tokens: data.costReport.total_tokens,
+                  cost: data.costReport.total_cost,
+                  prompt_tokens: data.costReport.prompt_tokens,
+                  completion_tokens: data.costReport.completion_tokens
+                };
+                logger.debug('Sending cost summary to parent:', costSummary);
+                onContribute({ costSummary });
+              }
+            } else {
+              logger.warn('No cost report in final response');
+            }
+
+            // Handle synthesis data
             if (data.synthesis) {
               setSynthesisData(data);
               addStatusMessage('Final synthesis ready.');
@@ -282,12 +303,14 @@ export const ExecutiveSuite: React.FC<ExecutiveSuiteProps> = ({ onConsult, isLoa
         <ResponseVisualizer
           response={synthesisData}
           costSummary={{
-            tokens: synthesisData.usage?.total_tokens || 0,
-            cost: synthesisData.usage?.estimated_cost || 0,
-            prompt_tokens: synthesisData.usage?.prompt_tokens || 0,
-            completion_tokens: synthesisData.usage?.completion_tokens || 0
+            tokens: costReport?.total_tokens || 0,
+            cost: costReport?.total_cost || 0,
+            prompt_tokens: costReport?.prompt_tokens || 0,
+            completion_tokens: costReport?.completion_tokens || 0
           }}
-          activeExecutives={Object.keys(activeExecutives).filter(exec => activeExecutives[exec].isActive)}
+          activeExecutives={Object.keys(activeExecutives).filter(
+            exec => activeExecutives[exec].hasResponded
+          )}
         />
       )}
     </div>

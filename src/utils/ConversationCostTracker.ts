@@ -14,46 +14,44 @@ export class ConversationCostTracker {
     this.usage.push(data);
   }
 
-  static generateReport(): string {
-    let report = '';
+  static generateReport(): any {
+    let totalPromptTokens = 0;
+    let totalCompletionTokens = 0;
     let totalTokens = 0;
     let totalCost = 0;
+    const executiveUsage: Record<string, any> = {};
 
-    // Group by agent
-    const agentUsage = this.usage.reduce((acc, curr) => {
-      if (!acc[curr.agent]) {
-        acc[curr.agent] = {
-          model: curr.model,
-          tokens: curr.total_tokens,
-          prompt_tokens: curr.prompt_tokens,
-          completion_tokens: curr.completion_tokens,
-          cost: curr.cost
+    // Calculate totals and group by executive
+    this.usage.forEach((data) => {
+      totalPromptTokens += data.prompt_tokens;
+      totalCompletionTokens += data.completion_tokens;
+      totalTokens += data.total_tokens;
+      totalCost += data.cost;
+
+      if (!executiveUsage[data.agent]) {
+        executiveUsage[data.agent] = {
+          model: data.model,
+          tokens: data.total_tokens,
+          prompt_tokens: data.prompt_tokens,
+          completion_tokens: data.completion_tokens,
+          cost: data.cost
         };
       } else {
-        acc[curr.agent].tokens += curr.total_tokens;
-        acc[curr.agent].prompt_tokens += curr.prompt_tokens;
-        acc[curr.agent].completion_tokens += curr.completion_tokens;
-        acc[curr.agent].cost += curr.cost;
+        executiveUsage[data.agent].tokens += data.total_tokens;
+        executiveUsage[data.agent].prompt_tokens += data.prompt_tokens;
+        executiveUsage[data.agent].completion_tokens += data.completion_tokens;
+        executiveUsage[data.agent].cost += data.cost;
       }
-      return acc;
-    }, {} as Record<string, any>);
-
-    // Generate report
-    Object.entries(agentUsage).forEach(([agent, data]) => {
-      report += `${agent}:\n`;
-      report += `  Model: ${data.model}\n`;
-      report += `  Tokens: ${data.tokens} (${data.prompt_tokens} prompt + ${data.completion_tokens} completion)\n`;
-      report += `  Cost: $${data.cost.toFixed(4)}\n`;
-      
-      totalTokens += data.tokens;
-      totalCost += data.cost;
     });
 
-    // Add totals
-    report += `-------------------------\n`;
-    report += `Total Tokens: ${totalTokens}\n`;
-    report += `Total Cost: $${totalCost.toFixed(4)}\n`;
-    report += `-------------------------`;
+    // Format the report
+    const report = {
+      total_tokens: totalTokens,
+      prompt_tokens: totalPromptTokens,
+      completion_tokens: totalCompletionTokens,
+      total_cost: totalCost,
+      executive_breakdown: executiveUsage
+    };
 
     // Clear usage for next conversation
     this.usage = [];

@@ -7,7 +7,12 @@ import { CompanyContext } from '../types/CompanyContext';
 
 export default function Home() {
   const [response, setResponse] = useState<any>(null);
-  const [costSummary, setCostSummary] = useState({ tokens: 0, cost: 0, prompt_tokens: 0, completion_tokens: 0 });
+  const [costSummary, setCostSummary] = useState({
+    tokens: 0,
+    cost: 0,
+    prompt_tokens: 0,
+    completion_tokens: 0
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [companyContext, setCompanyContext] = useState<CompanyContext>({
@@ -20,6 +25,12 @@ export default function Home() {
     setIsLoading(true);
     setError(null);
     setContributors([]);
+    setCostSummary({
+      tokens: 0,
+      cost: 0,
+      prompt_tokens: 0,
+      completion_tokens: 0
+    });
     
     try {
       const response = await fetch('/api/consult', {
@@ -53,6 +64,7 @@ export default function Home() {
           if (!event.startsWith('data: ')) continue;
           
           const data = JSON.parse(event.replace('data: ', ''));
+          console.log('Received event:', data);
           
           switch (data.type) {
             case 'status':
@@ -68,6 +80,7 @@ export default function Home() {
             case 'final':
               setResponse(data);
               if (data.costReport) {
+                console.log('Received cost report:', data.costReport);
                 setCostSummary({
                   tokens: data.costReport.total_tokens || 0,
                   cost: data.costReport.total_cost || 0,
@@ -82,11 +95,25 @@ export default function Home() {
           }
         }
       }
-    } catch (error) {
-      console.error('Error consulting executive:', error);
-      setError(error instanceof Error ? error.message : 'An error occurred');
+    } catch (error: any) {
+      setError(error.message || 'An error occurred');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleContribute = (data: any) => {
+    console.log('handleContribute called with:', data);
+    
+    if (data.costSummary) {
+      console.log('Updating cost summary:', data.costSummary);
+      setCostSummary(data.costSummary);
+    }
+    
+    if (data.executive) {
+      setContributors(prev => 
+        prev.includes(data.executive) ? prev : [...prev, data.executive]
+      );
     }
   };
 
@@ -99,11 +126,7 @@ export default function Home() {
       <ExecutiveSuite 
         onConsult={handleConsult} 
         isLoading={isLoading}
-        onContribute={(executive) => {
-          setContributors(prev => 
-            prev.includes(executive) ? prev : [...prev, executive]
-          );
-        }}
+        onContribute={handleContribute}
       />
       {error && (
         <div className="error-message">
