@@ -4,7 +4,7 @@ export type Executive =
   | 'Chief Financial Officer'
   | 'Chief Technology Officer'
   | 'Chief Operations Officer'
-  | 'Chief Human Resources Officer'
+  | 'Chief Product Officer'
   | 'Chief Compliance Officer'
   | 'Chief Sales Officer'
   | 'Chief Expansion Officer'
@@ -131,15 +131,15 @@ export const executives: ExecutiveInfo[] = [
   },
   {
     id: 'mf',
-    title: 'Chief Human Resources Officer',
+    title: 'Chief Product Officer',
     name: 'Michael Foster',
     initials: 'MF',
     color: '#44cc00',
     expertise: [
-      'Talent Management',
-      'Organizational Development',
-      'Culture Building',
-      'DEI Initiatives'
+      'Product Strategy',
+      'User Experience',
+      'Product Development',
+      'Market Research'
     ]
   },
   {

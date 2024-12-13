@@ -300,7 +300,7 @@ You can consult with:
 - Chief Financial Officer (CFO) for financial and investment decisions
 - Chief Technology Officer (CTO) for technical and digital transformation
 - Chief Operations Officer (COO) for operational excellence
-- Chief Human Resources Officer (CHRO) for people and culture
+- Chief Product Officer (CPO) for product strategy and user experience
 - Chief Compliance Officer (CCO) for regulatory and governance
 - Chief Sales Officer (CSO) for revenue and customer relationships
 - Chief Expansion Officer (CXO) for growth and market expansion

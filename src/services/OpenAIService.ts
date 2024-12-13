@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
-import { CEOResponse, CMOResponse, CTOResponse, CSOResponse, CDOResponse, CXOResponse, CCOResponse } from '../prompts/agentPrompts';
+import { CEOResponse, CMOResponse, CTOResponse, CSOResponse, CDOResponse, CXOResponse, CCOResponse, CPOResponse } from '../prompts/agentPrompts';
 import { PromptBuilder } from '../utils/promptBuilder';
 import { RateLimiter } from '../utils/rateLimiter';
 import { CostEstimator } from '../utils/costEstimator';
@@ -500,25 +500,98 @@ export class OpenAIService {
     }
   }
 
-  async getCFOResponse(query: string, companyContext?: CompanyContext): Promise<any> {
-    const prompt = `You are the Chief Financial Officer (CFO) of ${companyContext?.companyName || 'our company'}. 
-    Please analyze the following query from a financial perspective, considering budgets, ROI, cost management, and financial risks:
+  async getCPOResponse(query: string, companyContext?: CompanyContext): Promise<any> {
+    await this.rateLimiter.waitForToken();
     
-    ${query}
-    
-    Provide your analysis in the following format:
-    - Financial Analysis: A detailed analysis of the financial implications
-    - Budget Considerations: Key budget items and allocations
-    - ROI Projections: Expected return on investment
-    - Risk Assessment: Financial risks and mitigation strategies
-    - Cost Management: Strategies for managing and optimizing costs
-    - Recommendations: Specific financial recommendations
-    - KPIs: Key financial metrics to track
-    
-    Keep your response focused on financial aspects while considering the company's mission: ${companyContext?.missionStatement || 'delivering value to our stakeholders'}.`;
+    try {
+      const response = await this.retryWithBackoff(async () => {
+        const prompt = `You are the Chief Product Officer (CPO) of ${companyContext?.companyName || 'our company'}. 
+        Please analyze the following query from a product perspective, considering user experience, product strategy, and market fit:
+        
+        ${query}
+        
+        Provide your analysis in the following JSON format:
+        {
+          "productVision": {
+            "currentState": "Description of current product state",
+            "futureState": "Vision for product evolution",
+            "keyPrinciples": ["Core product principles"]
+          },
+          "userExperience": {
+            "analysis": "Analysis of user needs and behaviors",
+            "painPoints": ["Key user pain points"],
+            "opportunities": ["UX improvement opportunities"]
+          },
+          "productStrategy": {
+            "core": "Core product strategy",
+            "differentiation": ["Key differentiators"],
+            "marketFit": "Product-market fit analysis"
+          },
+          "designPrinciples": {
+            "usability": ["Key usability principles"],
+            "accessibility": ["Accessibility considerations"],
+            "feedback": ["User feedback mechanisms"]
+          },
+          "roadmap": {
+            "immediate": ["Priority features"],
+            "shortTerm": ["30-90 day features"],
+            "longTerm": ["Long-term feature plans"]
+          },
+          "metrics": {
+            "engagement": ["Engagement KPIs"],
+            "retention": ["Retention metrics"],
+            "satisfaction": ["User satisfaction metrics"]
+          }
+        }
+        
+        Keep your response focused on product aspects while considering the company's mission: ${companyContext?.missionStatement || 'delivering value to our users'}.`;
 
-    const response = await this.getCompletion(prompt);
-    return this.parseExecutiveResponse(response, 'CFO');
+        const completion = await this.openai.chat.completions.create({
+          model: "gpt-4",
+          messages: [
+            { 
+              role: "system", 
+              content: "You are a CPO providing product strategy advice. Always respond with properly formatted JSON matching the specified structure." 
+            },
+            { 
+              role: "user", 
+              content: prompt 
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 1000
+        });
+
+        const usage = completion.usage;
+        const cost = usage ? CostEstimator.estimateCost('gpt-4', usage.prompt_tokens, usage.completion_tokens) : 0;
+
+        // Track usage
+        if (usage) {
+          ConversationCostTracker.trackUsage({
+            prompt_tokens: usage.prompt_tokens,
+            completion_tokens: usage.completion_tokens,
+            total_tokens: usage.total_tokens,
+            cost,
+            model: 'gpt-4',
+            agent: 'CPO'
+          });
+        }
+
+        const responseText = completion.choices[0]?.message?.content;
+        if (!responseText) {
+          throw new Error('No response from OpenAI');
+        }
+
+        return this.parseCPOResponse(responseText);
+      });
+
+      this.rateLimiter.releaseToken();
+      return response;
+    } catch (error) {
+      this.rateLimiter.releaseToken();
+      console.error('Error getting CPO response:', error);
+      throw error;
+    }
   }
 
   async getFinalSynthesis(ceoResponse: any, consultations: any[]): Promise<any> {
@@ -692,6 +765,25 @@ export class OpenAIService {
     } catch (error) {
       console.error('Error parsing CCO response:', error);
       throw new Error('Failed to parse CCO response');
+    }
+  }
+
+  private parseCPOResponse(response: string): any {
+    try {
+      // Try to parse the response as JSON
+      const parsedResponse = JSON.parse(response);
+      
+      // Validate the required structure
+      if (!parsedResponse.productVision || !parsedResponse.userExperience || 
+          !parsedResponse.productStrategy || !parsedResponse.designPrinciples || 
+          !parsedResponse.roadmap || !parsedResponse.metrics) {
+        throw new Error('Invalid CPO response structure');
+      }
+      
+      return parsedResponse;
+    } catch (error) {
+      console.error('Error parsing CPO response:', error);
+      throw new Error('Failed to parse CPO response');
     }
   }
 } 

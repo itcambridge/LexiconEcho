@@ -61,6 +61,8 @@ async function getExecutiveResponse(
       return await openAIService.getCSOResponse(query, companyContext);
     case 'Chief Compliance Officer':
       return await openAIService.getCCOResponse(query, companyContext);
+    case 'Chief Product Officer':
+      return await openAIService.getCPOResponse(query, companyContext);
     default:
       console.warn(`No implementation for ${execTitle}`);
       return null;
