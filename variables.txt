@@ -1,0 +1,91 @@
+CSS VARIABLES (src/styles/globals.css)
+------------------
+Colors:
+  --color-primary: #0066cc      // Primary brand color, used for buttons and links
+  --color-success: #28a745      // Success state, used for active indicators
+  --color-success-light: #2fd556 // Lighter success color for hover/animation states
+  --color-gray: #666           // Standard text color
+  --color-light-gray: #f8f9fa  // Background color for sections
+  --color-border: #ddd         // Border color for elements
+
+Executive Card Borders (src/interfaces/ExecutiveSuite.module.css):
+  default: 2px solid transparent  // Default state border
+  active: var(--color-success)    // Active state border (#28a745)
+  active-pulse: var(--color-success-light) // Pulse animation color (#2fd556)
+
+Spacing & Layout:
+  --border-radius-sm: 4px      // Small border radius for buttons, inputs
+  --border-radius-lg: 12px     // Large border radius for cards
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1)  // Light shadow for cards
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15) // Medium shadow for hover states
+
+EXECUTIVE STATUS VARIABLES (src/pages/api/consult.ts)
+------------------
+Status Flags:
+  title: string                // Executive's title (e.g. 'Chief Technology Officer')
+  isActive: boolean           // Whether executive is currently analyzing (controls border animation)
+  hasResponded: boolean       // Whether executive has completed their analysis
+  isPending: boolean         // Whether executive is waiting to start analysis
+  timestamp: string          // ISO timestamp of when executive completed analysis
+  error?: boolean           // Optional flag for if executive encountered an error
+  errorMessage?: string     // Optional error message if executive encountered an error
+
+API Response Types (src/pages/api/consult.ts):
+  type: 'status'             // Event type for executive status updates
+  type: 'response'           // Event type for individual executive responses
+  type: 'final'             // Event type for final synthesis completion
+  type: 'error'             // Event type for error conditions
+
+Consultation Tracking:
+  executiveStatuses: Record<string, ExecutiveStatus>  // Tracks all executives' current states
+  executivesToConsult: string[]                      // List of executives to be consulted (from CEO)
+  consultationResults: Array<{                       // Array of completed consultations
+    title: string,                                   // Executive's title
+    response: any,                                   // Executive's response data
+    timestamp: string                                // When response was received
+  }>
+
+TYPESCRIPT STATE VARIABLES (src/interfaces/ExecutiveSuite.tsx)
+------------------
+Component State:
+  selectedExecutive: Executive  // Currently selected executive
+  query: string                // User's input query
+  isConsulting: boolean        // Whether consultation is in progress
+  synthesisData: any           // Final synthesis data from consultation
+  costReport: any             // Cost tracking data
+  activeExecutives: Record<string, ExecutiveStatus>  // Status of each executive
+  statusMessages: string[]     // Array of status update messages
+
+TYPESCRIPT INTERFACES (src/types/ExecutiveSuite.ts)
+------------------
+Types:
+  Executive                    // Union type of all executive titles
+  ExecutiveInfo               // Executive details (name, title, etc.)
+  ExecutiveStatus             // Status tracking for executives
+  ExecutiveResponse           // Response data from executives
+  ConsultationStatus          // Overall consultation state
+  SynthesisReport             // Final synthesis structure
+  ConsultationResult          // Complete consultation result
+
+ENVIRONMENT VARIABLES (.env)
+------------------
+API Keys:
+  OPENAI_API_KEY              // OpenAI API key for backend
+  NEXT_PUBLIC_OPENAI_API_KEY  // OpenAI API key for frontend
+
+COST TRACKING VARIABLES (src/utils/CostEstimator.ts)
+------------------
+Costs:
+  gpt-4:
+    prompt: 0.03              // Cost per 1K tokens for prompts
+    completion: 0.06          // Cost per 1K tokens for completions
+  gpt-3.5-turbo:
+    prompt: 0.0015           // Cost per 1K tokens for prompts
+    completion: 0.002        // Cost per 1K tokens for completions
+
+BUDGET TRACKING VARIABLES (src/utils/BudgetTracker.ts)
+------------------
+Budget:
+  DAILY_BUDGET: 5.00         // Daily budget limit in dollars
+  dailyUsage: number         // Current daily usage amount
+  lastReset: Date           // Last budget reset timestamp 

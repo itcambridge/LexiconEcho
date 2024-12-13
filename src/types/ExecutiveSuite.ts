@@ -19,6 +19,50 @@ export interface ExecutiveInfo {
   expertise: string[];
 }
 
+export interface ExecutiveStatus {
+  isActive: boolean;
+  hasResponded?: boolean;
+  timestamp?: string;
+}
+
+export interface ExecutiveResponse {
+  executive: Executive;
+  response: string;
+  timestamp: string;
+}
+
+export interface ConsultationStatus {
+  activeExecutives: Record<Executive, ExecutiveStatus>;
+  currentPhase: string;
+  messages: string[];
+}
+
+export interface SynthesisReport {
+  summary: string;
+  keyTakeaways: string[];
+  executiveAlignment: {
+    agreements: string[];
+    differences: string[];
+    synergies: string[];
+  };
+  integratedStrategy: string[];
+  implementationPlan: {
+    immediate: string[];
+    shortTerm: string[];
+    longTerm: string[];
+  };
+}
+
+export interface ConsultationResult {
+  synthesis: SynthesisReport;
+  usage?: {
+    total_tokens: number;
+    prompt_tokens: number;
+    completion_tokens: number;
+    estimated_cost: number;
+  };
+}
+
 export const executives: ExecutiveInfo[] = [
   {
     id: 'ac',

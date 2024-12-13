@@ -500,6 +500,27 @@ export class OpenAIService {
     }
   }
 
+  async getCFOResponse(query: string, companyContext?: CompanyContext): Promise<any> {
+    const prompt = `You are the Chief Financial Officer (CFO) of ${companyContext?.companyName || 'our company'}. 
+    Please analyze the following query from a financial perspective, considering budgets, ROI, cost management, and financial risks:
+    
+    ${query}
+    
+    Provide your analysis in the following format:
+    - Financial Analysis: A detailed analysis of the financial implications
+    - Budget Considerations: Key budget items and allocations
+    - ROI Projections: Expected return on investment
+    - Risk Assessment: Financial risks and mitigation strategies
+    - Cost Management: Strategies for managing and optimizing costs
+    - Recommendations: Specific financial recommendations
+    - KPIs: Key financial metrics to track
+    
+    Keep your response focused on financial aspects while considering the company's mission: ${companyContext?.missionStatement || 'delivering value to our stakeholders'}.`;
+
+    const response = await this.getCompletion(prompt);
+    return this.parseExecutiveResponse(response, 'CFO');
+  }
+
   async getFinalSynthesis(ceoResponse: any, consultations: any[]): Promise<any> {
     await this.rateLimiter.waitForToken();
     
