@@ -42,4 +42,8 @@ next-env.d.ts
 .idea/
 .vscode/
 *.swp
-*.swo 
+*.swo
+
+# Docker
+.docker/
+docker-compose.override.yml
